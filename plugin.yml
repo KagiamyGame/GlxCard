@@ -1,0 +1,15 @@
+name: GlxNapThe
+main: napthe/napthe
+version: 1.0.0
+api: 2.0.0
+commands:
+   napthe:
+      description: Show NapThe's Command.
+      usage: /napthe
+permissions:
+    NapThe.command:
+        description: Allows you to use command.
+        default: true
+    NapThe.admin:
+        description: Allows you to use admin's command.
+        default: op
