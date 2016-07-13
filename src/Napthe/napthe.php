@@ -1,7 +1,7 @@
 <?php
 
 namespace napthe;
-use napthe\BaokimSCard;
+use napthe\BaokimTrans;
 use napthe\Card;
 use napthe\LogFile;
 use napthe\NMS\NMS;
@@ -44,15 +44,6 @@ Class napthe extends Plugin implements Listener {
 			$this->log->close();
 			$this->logsai->close();
 		}
-	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
-		switch ($command->getName()){
-		case"napthe" && isset ($args[0]):
-			switch ($args[0]){
-				case"":
-				
-			}
-		}
-	}
 	public function onPlayerJoin(PlayerJoinEvent $e){
 		$c = new Card();
 		$this->map->put($e->getPlayer()->getUniqueId(), $c);
@@ -67,6 +58,10 @@ Class napthe extends Plugin implements Listener {
 			$p->sendMessage($this->getMessage("enteredSeri")->replace("{value}", $e->getMessage()));
 			$p->sendMessage("pin");
 		} else if (($c->stage == 2)){
+			$e->setCancelled(true);
+			$c->seri = $e->getMessage();
+			$c->stage = 2;
+			$p->sendMessage($this->getMessage("enteredSeri")->replace("{value}", $e->getMessage()));
 			
 		}
 		
