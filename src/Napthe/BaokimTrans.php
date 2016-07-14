@@ -1,16 +1,33 @@
 <?php
 
-header('Content-Type: text/html; charset=utf-8');
-define('CORE_API_HTTP_USR', 'merchant_19002');
-define('CORE_API_HTTP_PWD', '19002mQ2L8ifR11axUuCN9PMqJrlAHFS04o');
+namespace napthe;
+
+use napthe\napthe;
+
+class BaokimSCard {
+	public $userbk;
+	public $passbk;
+	public $bk;
+	public $seri;
+	public $pin;
+	public $mang;
+	public $api_username;
+	public $api_password;
+	public $transaction_id;
+	public $secure_code;
+	public $amount;
+	public $result;
+	
+	public function BaokimSCard(String $userbk, String $passbk, String $api_username, String $api_password, String $secure_code, String $merchant_id){
+	
+$userbk = 'CORE_API_HTTP_USR';
+$passbk = 'CORE_API_HTTP_PWD';
 
 $bk = 'https://www.baokim.vn/the-cao/restFul/send';
 $seri = isset($_POST['txtseri']) ? $_POST['txtseri'] : '';
-$sopin = isset($_POST['txtpin']) ? $_POST['txtpin'] : '';
+$pin = isset($_POST['txtpin']) ? $_POST['txtpin'] : '';
 //Loai the cao (VINA, MOBI, VIETEL, VTC, GATE)
 $mang = isset($_POST['chonmang']) ? $_POST['chonmang'] : '';
-$user = isset($_POST['txtuser']) ? $_POST['txtuser'] : '';
-
 
 
 if($mang=='MOBI'){
@@ -27,31 +44,21 @@ else if($mang=='VTC'){
 }
 else $ten ="Vinaphone";
 
-//Mã MerchantID dang kí trên Bảo Kim
-$merchant_id = '19002';
-//Api username
-$api_username = 'macintoshvn';
-//Api Pwd d
-$api_password = 'macintoshvn235dgsdg';
-//Mã TransactionId
-$transaction_id = time();
-//mat khau di kem ma website dang kí trên B?o Kim
-$secure_code = '1e6cb0e1c37b25cf';
-
 $arrayPost = array(
 		'merchant_id'=>$merchant_id,
 		'api_username'=>$api_username,
 		'api_password'=>$api_password,
 		'transaction_id'=>$transaction_id,
+		'secure_cods'=>$secure_code,
 		'card_id'=>$mang,
-		'pin_field'=>$sopin,
+		'pin_field'=>$pin,
 		'seri_field'=>$seri,
 		'algo_mode'=>'hmac'
 );
 
 ksort($arrayPost);
 
-$data_sign = hash_hmac('SHA1',implode('',$arrayPost),$secure_code);
+$data_sign = hash_hmac('SHA1',implode('',$arrayPost));
 
 $arrayPost['data_sign'] = $data_sign;
 
@@ -80,9 +87,7 @@ $time = time();
 if($status==200){
 	$amount = $result['amount'];
 	switch($amount) {
-		case 10000: $xu = 10000; break;
-		case 20000: $xu = 20000; break;
-		case 30000: $xu = 30000; break;
+		case 20000: $xu= 20000; break;
 		case 50000: $xu= 50000; break;
 		case 100000: $xu = 100000; break;
 		case 200000: $xu = 200000; break;
@@ -106,10 +111,7 @@ if($status==200){
 	fwrite($fh,"Tai khoan: ".$user.", Loai the: ".$ten.", Menh gia: ".$amount.", Thoi gian: ".$time);
 	fwrite($fh,"\r\n");
 	fclose($fh);
-	echo '<script>alert("Bạn đã thanh toán thành công thẻ '.$ten.' mệnh giá '.$amount.' ");
-
-	 window.location = "http://macintosh.vn"
-	</script>';
+	$sender->$sendMessage("Bạn đã thanh toán thành công thẻ '.$ten.' mệnh giá '.$amount.' ");
 
 }
 else{
@@ -118,13 +120,12 @@ else{
 	echo $error;
 	$file = "cardsai.log";
 	$fh = fopen($file,'a') or die("cant open file");
-	fwrite($fh,"Tai khoan: ".$user.", Ma the: ".$sopin.", Seri: ".$seri.", Noi dung loi: ".$error.", Thoi gian: ".$time);
+	fwrite($fh,"Tai khoan: ".$user.", Ma the: ".$pin.", Seri: ".$seri.", Noi dung loi: ".$error.", Thoi gian: ".$time);
 	fwrite($fh,"\r\n");
 	fclose($fh);
-	echo '<script>alert("Thong tin the cao khong hop le!");
+	$sender->$sendMessage("Thong tin the cao khong hop le!");
 
-
-	 window.location = "http://macintosh.vn/napthe/"
-	</script>';
 }
 
+}
+}
