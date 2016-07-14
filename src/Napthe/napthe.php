@@ -10,6 +10,8 @@ use napthe\Result;
 use napthe\TopLog;
 use napthe\CMD\NapVipCommand;
 use napthe\CMD\NapCoinCommand;
+use napthe\CMD\CardCommand;
+
 
 use pocketmine\Server;
 use pocketmine\Player;
@@ -49,6 +51,8 @@ Class napthe extends Plugin implements Listener {
 		$this->topLog = TopLog::constructor__NapThe($this);
 		
 		$this->getCommand('napvip')->setExecutor(new NapVipCommand($this));
+		$this->getCommand('napxu')->setExecutor(new NapCoinCommand($this));
+		$this->getCommand('napthe')->setExecutor(new CardCommand($this));
 		
 	}
 	public function onDisable(){
