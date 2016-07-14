@@ -2,10 +2,8 @@
 
 namespace napthe;
 
-use napthe\BaokimTrans
+use napthe\BaokimTrans;
 use napthe\Card;
-use napthe\LogFile;
-use napthe\NMS\NMS;
 use napthe\Result;
 use napthe\TopLog;
 use napthe\CMD\NapVipCommand;
@@ -77,13 +75,46 @@ Class napthe extends Plugin implements Listener {
 			$c->seri = $e->getMessage();
 			$c->stage = 0;
 			$p->sendMessage($this->getMessage("enteredSeri")->replace("{value}", $e->getMessage()));
-			$this->napThe($p);
+		$this->napThe($p);
 		}
 		
 	}
-	public function BaokimTrans() {
+	
+	public function napThe($p) {
+		$c = $this->map->get($p->UniqueId());
+		$this->getServer()->getScheduler()->scheduleAsyncTask($this, new Runable());
+	}
+	
+	protected function sendVip($p, $amount) {
+		$cmd = $this->fc->get('Prize.' . '$amount\ 100');
+		foreach ($cmd as $s) {
+			$this->getServer()->dispatchCommand(new ConsoleCommandSender(),'setgroup '.$p->getName().' Vip2');
+		}
+	}
+	
+	public function activeMode($p, $mang) {
+		$p->sendMessage($this->getMessage("seri"));
+		$c = $this->map->get($p->UniqueId());
+		$c->mang = $mang;
+		$c->stage = 1;
+	}
+	
+	public function getMessage($m) {
+		return $this->fc->getString(("Message." .$m))->replace("&", "?");
+	}
+	
+	public function loadConfiguration() {
+		$this->getConfig()->setDefaults(true);
+		$this->saveConfig();
+		$this->getConfig()->setDefaults(false);
+	}
+	public function initConfig() {
 		$this->fc = $this->getConfig();
-		$this->baokim = BaokimTrans();
-		
+		foreach ($this->fc->getAll(true) as $k) 
+		$spl = $k->split("\\.");
+		if ((((count($spl) /*from: spl.length*/ != 2) || $spl[0]->equals("Card")) || $this->fc->getEloolean[$k])) continue;
+		$this->nhamang->add($spl[1]);
+		$this->baokim = new BaokimTrans($userbk, $passbk, $api_username, $api_password, $secure_code, $merchant_id);
+		$this->saveTop = $this->fc->get("Top.enable");
 	}
 }
