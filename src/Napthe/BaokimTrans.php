@@ -5,20 +5,20 @@ namespace napthe;
 use napthe\napthe;
 
 class BaokimSCard {
-	public $userbk;
-	public $passbk;
-	public $bk;
-	public $seri;
-	public $pin;
-	public $mang;
-	public $api_username;
-	public $api_password;
-	public $transaction_id;
-	public $secure_code;
-	public $amount;
-	public $result;
+	private $userbk;
+	private $passbk;
+	private $bk;
+	private $seri;
+	private $pin;
+	private $mang;
+	private $api_username;
+	private $api_password;
+	private $transaction_id;
+	private $secure_code;
+	private $amount;
+	private $result;
 	
-	public function BaokimSCard(String $userbk, String $passbk, String $api_username, String $api_password, String $secure_code, String $merchant_id){
+	public function BaokimTrans(String $userbk, String $passbk, String $api_username, String $api_password, String $secure_code, String $merchant_id){
 	
 $userbk = 'CORE_API_HTTP_USR';
 $passbk = 'CORE_API_HTTP_PWD';
