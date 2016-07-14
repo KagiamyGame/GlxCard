@@ -12,7 +12,7 @@ use napthe\CMD\CardCommand;
 
 
 use pocketmine\Server;
-use pocketmine\Player;
+use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
@@ -28,25 +28,32 @@ use pocketnine\scheduler\Task;
 Class napthe extends Plugin implements Listener {
 	public $fc;
 	public $baokim;
+	private $saveTop;
+	private $log;
+	private $map;
 	public function onEnable(){
-		@mkdir($this->getDataFolder());
+	@mkdir($this->getDataFolder());
 		$this->fc = new Config($this->getDataFolder()."config.yml",Config::YAML);
-		$this->saveDefaultConfig();
 		$this->reloadConfig();
+		$this->loadConfiguration();
+		$this->initConfig();
 		
 		$this->userbk = $this->getConfig()->get('CORE_API_HTTP_USR', '');
 		$this->passbk = $this->getConfig()->get('CORE_API_HTTP_PWD', '');
 		$this->api_username = $this->getConfig()->get('API_USERNAME', '');
 		$this->api_password = $this->getConfig()->get('API_PASSWORD', '');
 		$this->merchant_id = $this->getConfig()->get('MERCHANT_ID', '');
+		$this->secure_code = $this->getConfig()->get('SECURE_CODE', '');
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		foreach ($this->$getServer()->getOnlinePlayer() as $p) {
 		$c = new Card;
 		$this->map->put($p->getUniqueId(), $c);
 		}
-		$this->log = LogFile::constructor__String("thedung");
-		$this->logsai = LogFile::constructor__String("thesai");
 		$this->topLog = TopLog::constructor__NapThe($this);
+		
+		$this->getCommand('napvip')->setExecutor(new NapVipCommand($this));
+		$this->getCommand('napxu')->setExecutor(new NapCoinCommand($this));
+		$this->getCommand('card')->setExecutor(new CardCommand($this));
 		
 		$this->getCommand('napvip')->setExecutor(new NapVipCommand($this));
 		$this->getCommand('napxu')->setExecutor(new NapCoinCommand($this));
