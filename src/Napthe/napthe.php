@@ -32,6 +32,9 @@ Class napthe extends Plugin implements Listener {
 	private $log;
 	private $map;
 	public function onEnable(){
+		
+		self::$plugin = $this;
+		
 	@mkdir($this->getDataFolder());
 		$this->fc = new Config($this->getDataFolder()."config.yml",Config::YAML);
 		$this->reloadConfig();
