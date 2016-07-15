@@ -9,12 +9,12 @@ use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as TF;
 
 class CardCommand extends PluginCommand {
-  
-  public function __construct(main $main, $name) {
+  private $plugin;
+  public function __construct(Napthe $plugin, $name) {
     parent::__construct(
-      $name, $main
+      $name, $plugin
     );
-    $this->main = $main;
+    $this->plugin = $plugin;
     $this->setPermission("card.command");
     $this->setAliases(array("card"));
   }
