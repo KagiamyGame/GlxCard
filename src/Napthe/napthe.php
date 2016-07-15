@@ -35,8 +35,10 @@ Class napthe extends Plugin implements Listener {
 	@mkdir($this->getDataFolder());
 		$this->fc = new Config($this->getDataFolder()."config.yml",Config::YAML);
 		$this->reloadConfig();
-		$this->loadConfiguration();
-		$this->initConfig();
+		
+
+		$this->baokim = new BaokimTrans($userbk, $passbk, $api_username, $api_password, $secure_code, $merchant_id);
+		$this->saveTop = $this->fc->get("Top.enable");
 		
 		$this->userbk = $this->getConfig()->get('CORE_API_HTTP_USR', '');
 		$this->passbk = $this->getConfig()->get('CORE_API_HTTP_PWD', '');
@@ -55,14 +57,15 @@ Class napthe extends Plugin implements Listener {
 		$this->getCommand('napxu')->setExecutor(new NapCoinCommand($this));
 		$this->getCommand('card')->setExecutor(new CardCommand($this));
 		
-		$this->getCommand('napvip')->setExecutor(new NapVipCommand($this));
-		$this->getCommand('napxu')->setExecutor(new NapCoinCommand($this));
-		$this->getCommand('napthe')->setExecutor(new CardCommand($this));
-		
 	}
 	public function onDisable(){
-			$this->log->close();
-			$this->logsai->close();
+			$this->userbk = null;
+                        $this->passbk = null;
+                        $this->api_username = null;
+                        $this->api_password = null;
+                        $this->merchant_id = null;
+                        $this->secure_code = null;
+
 		}
 	public function onPlayerJoin(PlayerJoinEvent $e){
 		$c = new Card();
@@ -107,21 +110,7 @@ Class napthe extends Plugin implements Listener {
 	}
 	
 	public function getMessage($m) {
-		return $this->fc->getString(("Message." .$m))->replace("&", "?");
+		return $this->fc->get(("Message." .$m))->replace("&", "?");
 	}
 	
-	public function loadConfiguration() {
-		$this->getConfig()->setDefaults(true);
-		$this->saveConfig();
-		$this->getConfig()->setDefaults(false);
-	}
-	public function initConfig() {
-		$this->fc = $this->getConfig();
-		foreach ($this->fc->getAll(true) as $k) 
-		$spl = $k->split("\\.");
-		if ((((count($spl) /*from: spl.length*/ != 2) || $spl[0]->equals("Card")) || $this->fc->getEloolean[$k])) continue;
-		$this->nhamang->add($spl[1]);
-		$this->baokim = new BaokimTrans($userbk, $passbk, $api_username, $api_password, $secure_code, $merchant_id);
-		$this->saveTop = $this->fc->get("Top.enable");
-	}
 }
