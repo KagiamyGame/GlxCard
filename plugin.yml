@@ -1,15 +1,22 @@
 name: GlxNapThe
 main: Napthe\napthe
-author: Justin
+author: Justin (with a little help of Adam1609)
 version: 1.0.0
 api: 2.0.0
 commands:
    napvip:
-      description: NapVip Command.
+      description: Lệnh Nạp VIP cho server
       usage: /napvip
    napxu:
-      description: Napxu Command
+      description: Lệnh Nạp Xu cho server
+      usage: /napxu
+   card:
+      description: Lệnh card cho server
+      usage: /card
 permissions:
     napvip.command:
         description: Allows you to use command.
+        default: true
+    card.command:
+        description: Allows you to use the card command.
         default: true
